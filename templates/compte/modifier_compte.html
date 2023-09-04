@@ -1,0 +1,55 @@
+{% extends 'admin/index.html' %}
+{% load static %}
+
+{% block cp %}
+<link rel="stylesheet" href="{% static 'css/modifier.css' %}">
+<div class="containe">
+    <h2>Mon compte</h2>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3>Modifier les informations</h3>
+    <form method="post" action="{% url 'compte:modifier_compte' %}">
+        {% csrf_token %}
+        <label for="username">Nom d'utilisateur:</label>
+        <input type="text" name="username" value="{{ request.user.username }}"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ request.user.email }}"><br><br>
+
+        <button type="submit">Enregistrer les modifications</button>
+    </form>
+
+    <h3>Modifier le mot de passe</h3>
+    <form method="post" action="{% url 'compte:modifier_compte' %}">
+        {% csrf_token %}
+        <label for="old_password">Ancien mot de passe:</label>
+        <input type="password" name="old_password"><br><br>
+
+        <label for="new_password1">Nouveau mot de passe:</label>
+        <input type="password" name="new_password1"><br><br>
+
+        <label for="new_password2">Confirmer le nouveau mot de passe:</label>
+        <input type="password" name="new_password2"><br><br>
+
+        <button type="submit">Changer le mot de passe</button>
+    </form>
+
+    <h3>Ajouter un nouvel utilisateur</h3>
+    <form method="post" action="{% url 'compte:ajouter_utilisateur' %}">
+        {% csrf_token %}
+        <label for="new_username">Nom d'utilisateur:</label>
+        <input type="text" name="new_username"><br><br>
+
+        <label for="new_password">Mot de passe:</label>
+        <input type="password" name="new_password"><br><br>
+
+        <button type="submit">Ajouter l'utilisateur</button>
+    </form>
+</div>
+{% endblock %}

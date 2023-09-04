@@ -1,0 +1,161 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<title>Gestion des employés</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Gestion des employés</h2>
+    <div>
+      <button class="add-btn" onclick="showAddDialog()">
+        <i class="fa-solid fa-plus"></i> &nbsp; Ajouter un employé
+      </button>
+    </div>
+  </div>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Statut</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employe in employes %}
+        <tr>
+          <td>{{ employe.employe_id }}</td>
+          <td>{{ employe.nom }}</td>
+          <td>{{ employe.get_statut_display }}</td>
+          <td>{{ employe.email_employee }}</td>
+          <td>{{ employe.telephone }}</td>
+          <td>
+            <div class="table-action-btns">
+              <button
+                class="table-action-btn table-modify-action-btn"
+                onclick="showModifyDialog('{{ employe.employe_id }}', '{{ employe.nom }}', '{{ employe.statut }}', '{{ employe.email_employee }}', '{{ employe.telephone }}')"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="table-action-btn table-delete-action-btn"
+                onclick="showDeleteConfirmation('{{ employe.employe_id }}')"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="modifyDialog" class="dialog">
+  <h2>Modifier l'employé</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div id="modifyDialog" class="dialog">
+      <h2>Modifier l'employé</h2>
+      <form method="post">
+        {% csrf_token %}
+        <label for="modify_nom">Nom:</label>
+        <input type="text" id="modify_nom" name="nom" value="{{ nom }}" /><br />
+
+        <label for="modify_statut">Statut:</label>
+        <input
+          type="text"
+          id="modify_statut"
+          name="statut"
+          value="{{ statut }}"
+        /><br />
+
+        <label for="modify_email">Email:</label>
+        <input
+          type="email"
+          id="modify_email"
+          name="email"
+          value="{{ email }}"
+        /><br />
+
+        <label for="modify_telephone">Téléphone:</label>
+        <input
+          type="tel"
+          id="modify_telephone"
+          name="telephone"
+          value="{{ telephone }}"
+        /><br />
+
+        <button type="submit" name="modifier">Modifier</button>
+        <button type="button" onclick="closeDialog('modifyDialog')">
+          Annuler
+        </button>
+      </form>
+    </div>
+    <button type="submit" name="modifier">Modifier</button>
+    <button type="button" onclick="closeDialog('modifyDialog')">Annuler</button>
+  </form>
+</div>
+
+<div id="deleteConfirmationDialog" class="dialog">
+  <p id="deleteConfirmationMessage">
+    Êtes-vous sûr de vouloir supprimer cet employé ?
+  </p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" id="delete_employe_id" name="employe_id" value="" />
+    <button type="submit" name="supprimer">Confirmer la suppression</button>
+    <button type="button" onclick="closeDialog('deleteConfirmationDialog')">
+      Annuler
+    </button>
+  </form>
+</div>
+
+<div id="addDialog" class="dialog">
+  <h2>Ajouter un employé</h2>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit" name="ajouter">Ajouter</button>
+    <button type="button" onclick="closeDialog('addDialog')">Annuler</button>
+  </form>
+</div>
+
+<script>
+  function showDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "block";
+  }
+
+  function closeDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "none";
+  }
+
+  function showModifyDialog(employeId, nom, statut, email, telephone) {
+    const modifyDialog = document.getElementById("modifyDialog");
+    const modifyNomInput = document.getElementById("modify_nom");
+    const modifyStatutInput = document.getElementById("modify_statut");
+    const modifyEmailInput = document.getElementById("modify_email");
+    const modifyTelephoneInput = document.getElementById("modify_telephone");
+
+    // Populate form fields with employee data
+    modifyNomInput.value = nom;
+    modifyStatutInput.value = statut;
+    modifyEmailInput.value = email;
+    modifyTelephoneInput.value = telephone;
+
+    // Show the modify dialog
+    showDialog("modifyDialog");
+  }
+
+  function showDeleteConfirmation(employeId) {
+    document.getElementById("delete_employe_id").value = employeId;
+    showDialog("deleteConfirmationDialog");
+  }
+
+  function showAddDialog() {
+    showDialog("addDialog");
+  }
+</script>
+{% endblock %}

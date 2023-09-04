@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/acceuil.css' %}">
+    <title>Connexion et Inscription</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="tittle">
+            <h2 class="title login">Connexion</h2>
+            </div>
+            <div class="forms">
+                <div class="connexion-form">
+                    <form  method="post">
+                        {% csrf_token %}
+                        {{ conn_form.as_p }}
+                        <button type="submit" name="connexion">Se connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const connexionForm = document.querySelector('.connexion-form');
+            const inscriptionForm = document.querySelector('.inscription-form');
+            const loginTitle = document.querySelector('.title.login');
+            const signupTitle = document.querySelector('.title.signup');
+
+            const showConnexionForm = () => {
+                connexionForm.classList.remove('hidden');
+                inscriptionForm.classList.add('hidden');
+            };
+
+            const showInscriptionForm = () => {
+                connexionForm.classList.add('hidden');
+                inscriptionForm.classList.remove('hidden');
+            };
+
+            loginTitle.addEventListener('click', showConnexionForm);
+            signupTitle.addEventListener('click', showInscriptionForm);
+        });
+    </script>
+</body>
+</html>

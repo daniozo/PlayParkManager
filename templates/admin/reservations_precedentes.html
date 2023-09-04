@@ -1,0 +1,10 @@
+{% extends 'admin/index.html' %}
+
+{% block cp %}
+  <h3>Réservations récentes :</h3>
+  <ul>
+    {% for reservation in reservations %}
+      <li>{{ reservation.nom_client }} - {{ reservation.activite.nom }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

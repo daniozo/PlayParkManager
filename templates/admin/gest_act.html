@@ -1,0 +1,183 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<title>Liste d'activités</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Liste d'activités</h2>
+    <div>
+      <button class="add-btn" onclick="showAddDialog()">
+        <i class="fa-solid fa-plus"></i> &nbsp; Ajouter une activité
+      </button>
+  </div>
+    </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Âge minimum</th>
+            <th>Capacité max</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for activite in activites %}
+          <tr>
+            <td>{{ activite.nom }}</td>
+            <td>{{ activite.description }}</td>
+            <td>{{ activite.prix }}</td>
+            <td>{{ activite.age_minimum }}</td>
+            <td>{{ activite.capacite_max }}</td>
+            <td>
+            <div class="table-action-btns">
+              <button
+                class="table-action-btn table-modify-action-btn"
+                onclick="showModifyDialog('{{ activite.nom }}', '{{ activite.description }}', '{{ activite.prix }}', '{{ activite.age_minimum }}', '{{ activite.capacite_max }}', '{{ activite.activite_id }}')"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="table-action-btn table-delete-action-btn"
+                onclick="showDeleteConfirmation('{{ activite.nom }}', '{{ activite.activite_id }}')"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="modifyDialog" class="dialog">
+      <h2>Modifier l'activité</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="modify_activite_id"
+          name="activite_id"
+          value=""
+        />
+        <label for="nouveau_nom">Nouveau nom:</label>
+        <input
+          type="text"
+          id="nouveau_nom"
+          name="nouveau_nom"
+          placeholder="Nouveau nom"
+        />
+        <label for="nouvelle_description">Nouvelle description:</label>
+        <textarea
+          id="nouvelle_description"
+          name="nouvelle_description"
+          placeholder="Nouvelle description"
+        ></textarea>
+        <label for="nouveau_prix">Nouveau prix:</label>
+        <input
+          type="text"
+          id="nouveau_prix"
+          name="nouveau_prix"
+          placeholder="Nouveau prix"
+        />
+        <label for="nouvel_age_minimum">Nouvel âge minimum:</label>
+        <input
+          type="text"
+          id="nouvel_age_minimum"
+          name="nouvel_age_minimum"
+          placeholder="Nouvel âge minimum"
+        />
+        <label for="nouvelle_capacite_max">Nouvelle capacité max:</label>
+        <input
+          type="text"
+          id="nouvelle_capacite_max"
+          name="nouvelle_capacite_max"
+          placeholder="Nouvelle capacité max"
+        />
+        <button type="submit" name="modifier">Modifier</button>
+        <button type="button" onclick="closeModifyDialog()">Annuler</button>
+      </form>
+    </div>
+
+    <div id="deleteConfirmationDialog" class="dialog">
+      <p id="deleteConfirmationMessage">
+        Êtes-vous sûr de vouloir supprimer cette activité ?
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="delete_activite_id"
+          name="activite_id"
+          value=""
+        />
+        <button type="submit" name="supprimer">Confirmer la suppression</button>
+        <button type="button" onclick="closeDeleteConfirmation()">
+          Annuler
+        </button>
+      </form>
+    </div>
+
+    <div id="addDialog" class="dialog">
+      <h2>Ajouter une activité</h2>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit" name="ajouter">Ajouter</button>
+        <button type="button" onclick="closeDialog('addDialog')">
+          Annuler
+        </button>
+      </form>
+    </div>
+  </div>
+  <script>
+    function showDialog(dialogId) {
+      const dialog = document.getElementById(dialogId);
+      dialog.style.display = "block";
+    }
+
+    function closeModifyDialog() {
+      const dialog = document.getElementById("modifyDialog");
+      dialog.style.display = "none";
+    }
+    function closeDeleteConfirmation() {
+      const dialog = document.getElementById("deleteConfirmationDialog");
+      dialog.style.display = "none";
+    }
+
+    function showModifyDialog(
+      nom,
+      description,
+      prix,
+      age_minimum,
+      capacite_max,
+      activiteId
+    ) {
+      document.getElementById("modify_activite_id").value = activiteId;
+      document.getElementById("nouveau_nom").value = nom;
+      document.getElementById("nouvelle_description").value = description;
+      document.getElementById("nouveau_prix").value = prix;
+      document.getElementById("nouvel_age_minimum").value = age_minimum;
+      document.getElementById("nouvelle_capacite_max").value = capacite_max;
+      showDialog("modifyDialog");
+    }
+
+    function showDeleteConfirmation(nom, activiteId) {
+      document.getElementById("delete_activite_id").value = activiteId;
+      const confirmationMessage = document.getElementById(
+        "deleteConfirmationMessage"
+      );
+      confirmationMessage.textContent = `Êtes-vous sûr de vouloir supprimer "${nom}" ?`;
+      showDialog("deleteConfirmationDialog");
+    }
+    function showAddDialog() {
+      showDialog("addDialog");
+    }
+
+    function closeAddDialog() {
+      const dialog = document.getElementById("addDialog");
+      dialog.style.display = "none";
+    }
+  </script>
+  {% endblock %}
+</div>

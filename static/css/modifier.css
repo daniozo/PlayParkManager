@@ -1,0 +1,73 @@
+:root {
+    --darkPaper: #111936;
+    --darkBgColor: #1a223f;
+    --darkLevel1: #262f4d;
+    --darkLevel2: #29314f;
+    --darkLevel3: #212946;
+    --darkPrimaryLight: #eef2f6;
+    --darkPrimaryMain: #2196f3;
+    --darkSecondaryLight: #d1c4e9;
+    --darkSecondaryMain: #7c4dff;
+    --darkTextTitle: #d7dcec;
+    --darkTextPrimary: #bdc8f0;
+    --darkTextSecondary: #8492c4;
+    --darkSecondary: #8492c4;
+    --darkGray100: #eef2f6;
+    --darkGray300: #cdd5df;
+    --successMain: #00e676;
+    --errorMain: #f44336;
+    --orangeMain: #ffab91;
+    --warningMain: #ffe57f;
+}
+
+/* Basic styling */
+
+
+.containe {
+    margin: 0 auto;
+    padding: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    margin-bottom: 10px;
+    color: var(--darkTextTitle);
+}
+
+form label {
+    color: var(--darkTextSecondary);
+}
+
+form input {
+    width: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--darkGray300);
+    border-radius: 3px;
+    background-color: var(--darkLevel1);
+    color: var(--darkTextPrimary);
+}
+
+form button {
+    padding: 10px 15px;
+    background-color: var(--darkSecondaryMain);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: var(--darkSecondaryLight);
+}
+
+.messages.success {
+    background-color: var(--successMain);
+    color: white;
+}
+
+.messages.error {
+    background-color: var(--errorMain);
+    color: white;
+}

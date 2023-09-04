@@ -1,0 +1,162 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<title>Liste des contacts</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Liste contacts</h2>
+    <div>
+      <button class="add-btn" onclick="showAddDialog()">
+        <i class="fa-solid fa-plus"></i> &nbsp; Ajouter un contact
+      </button>
+    </div>
+  </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Sujet</th>
+      <th>Actions</th>
+    </tr>
+</thead>
+        <tbody>
+    {% for contact in contacts %}
+    <tr>
+      <td>{{ contact.nom }}</td>
+      <td>{{ contact.email }}</td>
+      <td>{{ contact.sujet }}</td>
+      <td>
+            <div class="table-action-btns">
+        <button
+        class="table-action-btn table-show-action-btn"
+          onclick="showViewDialog('{{ contact.nom }}', '{{ contact.email }}', '{{ contact.sujet }}', '{{ contact.message }}')"
+        >
+          <i class="fa-solid fa-eye"></i>
+        </button>
+        <button
+            class="table-action-btn table-modify-action-btn"
+          onclick="showModifyDialog('{{ contact.contact_id }}', '{{ contact.nom }}', '{{ contact.email }}', '{{ contact.sujet }}', '{{ contact.message }}')"
+        >
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button
+            class="table-action-btn table-delete-action-btn"
+          onclick="showDeleteConfirmation('{{ contact.nom }}', '{{ contact.contact_id }}')"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+      </td>
+    </tr>
+    {% endfor %}
+</tbody>
+  </table>
+</div>
+</div>
+</div>
+
+  <div id="viewDialog" class="dialog">
+    <h2>Details du contact</h2>
+    <p><strong>Nom:</strong> <span id="view_nom"></span></p>
+    <p><strong>Email:</strong> <span id="view_email"></span></p>
+    <p><strong>Sujet:</strong> <span id="view_sujet"></span></p>
+    <p><strong>Message:</strong></p>
+    <p id="view_message"></p>
+    <button onclick="closeDialog('viewDialog')">Fermer</button>
+  </div>
+
+  <div id="modifyDialog" class="dialog">
+    <h2>Modifier le contact</h2>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" id="modify_contact_id" name="contact_id" value="" />
+      <label for="nouveau_nom">Nouveau nom:</label>
+      <input type="text" id="nouveau_nom" name="nouveau_nom" required />
+      <label for="nouvel_email">Nouvel email:</label>
+      <input type="email" id="nouvel_email" name="nouvel_email" required />
+      <label for="nouveau_sujet">Nouveau sujet:</label>
+      <input type="text" id="nouveau_sujet" name="nouveau_sujet" required />
+      <label for="nouveau_message">Nouveau message:</label>
+      <textarea id="nouveau_message" name="nouveau_message" required></textarea>
+      <button type="submit" name="modifier">Modifier</button>
+      <button type="button" onclick="closeDialog('modifyDialog')">
+        Annuler
+      </button>
+    </form>
+  </div>
+
+  <div id="deleteConfirmationDialog" class="dialog">
+    <p id="deleteConfirmationMessage">
+      Êtes-vous sûr de vouloir supprimer ce contact ?
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" id="delete_contact_id" name="contact_id" value="" />
+      <button type="submit" name="supprimer">Confirmer la suppression</button>
+      <button type="button" onclick="closeDialog('deleteConfirmationDialog')">
+        Annuler
+      </button>
+    </form>
+  </div>
+
+  <div id="addDialog" class="dialog">
+    <h2>Ajouter un nouveau contact</h2>
+    <form method="post">
+      {% csrf_token %}
+      <label for="nouveau_nom">Nom:</label>
+      <input type="text" id="nouveau_nom" name="nouveau_nom" required />
+      <label for="nouvel_email">Email:</label>
+      <input type="email" id="nouvel_email" name="nouvel_email" required />
+      <label for="nouveau_sujet">Sujet:</label>
+      <input type="text" id="nouveau_sujet" name="nouveau_sujet" required />
+      <label for="nouveau_message">Message:</label>
+      <textarea id="nouveau_message" name="nouveau_message" required></textarea>
+      <button type="submit" name="ajouter">Ajouter</button>
+      <button type="button" onclick="closeDialog('addDialog')">Annuler</button>
+    </form>
+  </div>
+
+  <script>
+    function showDialog(dialogId) {
+      const dialog = document.getElementById(dialogId);
+      dialog.style.display = "block";
+    }
+
+    function closeDialog(dialogId) {
+      const dialog = document.getElementById(dialogId);
+      dialog.style.display = "none";
+    }
+
+    function showViewDialog(nom, email, sujet, message) {
+      document.getElementById("view_nom").textContent = nom;
+      document.getElementById("view_email").textContent = email;
+      document.getElementById("view_sujet").textContent = sujet;
+      document.getElementById("view_message").textContent = message;
+      showDialog("viewDialog");
+    }
+
+    function showModifyDialog(contactId, nom, email, sujet, message) {
+      document.getElementById("modify_contact_id").value = contactId;
+      document.getElementById("nouveau_nom").value = nom;
+      document.getElementById("nouvel_email").value = email;
+      document.getElementById("nouveau_sujet").value = sujet;
+      document.getElementById("nouveau_message").value = message;
+      showDialog("modifyDialog");
+    }
+
+    function showDeleteConfirmation(nom, contactId) {
+      document.getElementById("delete_contact_id").value = contactId;
+      const confirmationMessage = document.getElementById(
+        "deleteConfirmationMessage"
+      );
+      confirmationMessage.textContent = `Êtes-vous sûr de vouloir supprimer le contact "${nom}" ?`;
+      showDialog("deleteConfirmationDialog");
+    }
+
+    function showAddDialog() {
+      showDialog("addDialog");
+    }
+  </script>
+
+  {% endblock %}
+</div>

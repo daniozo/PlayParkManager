@@ -1,0 +1,103 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Tableau de bord</h2>
+    </div>
+    <div class="recents-reservation">
+      <h3 class="recents-reservation-title">Réservations récentes</h3>
+      <ul class="recents-reservation-list">
+        {% for reservation in reservations %}
+        <li class="recents-reservation-list-item">
+          <span class="reservation-client-name"
+            >{{ reservation.nom_client }}</span
+          >
+
+          <span class="reservation-activity-name"
+            >{{ reservation.activite.nom }}</span
+          >
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="graph-wrapper">
+      <div class="graph participants-graph">
+        <h3 class="graph-title">Participants par date</h3>
+        <canvas id="participantsChart" width="400" height="200"></canvas>
+      </div>
+      <div class="graph activities-graph">
+        <h3 class="graph-title">Activités</h3>
+        <canvas id="activitesChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      var ctxParticipants = document.getElementById('participantsChart').getContext('2d');
+
+      const ctxParticipants_config = {
+               type: 'line',
+               data: {
+                   labels: [{% for stat in statistiques %}"{{ stat.date|date:'d M' }}",{% endfor %}],
+           datasets: [{
+               label: 'Nombre total de Participants',
+               data: [{% for stat in statistiques %}{{ stat.participants }}, {% endfor %}],
+               borderColor: 'rgba(255, 99, 132, 1)',
+                   borderWidth: 1,
+                       fill: false
+               }]
+           },
+           options: {
+      	    scales: {
+      				x: {
+      			ticks: {
+                  color: '#ccc',
+                },
+              },
+              y: {
+                  beginAtZero: true,
+      					ticks: {
+                  color: '#ccc',
+                },
+                }
+            }
+           }
+      }
+      var participantsChart = new Chart(ctxParticipants, ctxParticipants_config);
+
+      var ctxActivites = document.getElementById('activitesChart').getContext('2d');
+
+      const ctxActivites_config = {
+          type: 'bar',
+          data: {
+              labels: [{% for activite in activites_plus_reservees %} "{{ activite.nom }}", {% endfor %}],
+              datasets: [
+                  {
+                  	label: 'Nombre de Réservations',
+                  	data: [{% for activite in activites_plus_reservees %}{{ activite.num_reservations }}, {% endfor %}],
+                  	backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  	borderColor: 'rgba(75, 192, 192, 1)',
+                  	borderWidth: 1,
+                  	},
+              ],
+      	  },
+          options: {
+      	    scales: {
+      				x: {
+      			ticks: {
+                  color: '#ccc',
+                },
+              },
+              y: {
+                  beginAtZero: true,
+      					ticks: {
+                  color: '#ccc',
+                },
+                }
+            }
+          }
+       }
+        var activitesChart = new Chart(ctxActivites, ctxActivites_config);
+    </script>
+  </div>
+  {% endblock %}
+</div>

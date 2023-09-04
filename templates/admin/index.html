@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Roboto&display=swap"
+        rel="stylesheet">
+    <title>PlayPark Manager - Accueil</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="hc">
+                <h1 class="titre">PlayPark Manager</h1>
+                <div class="nc">
+                    <div class="notifications">
+                        <i class="fas fa-sharp fa-regular fa-box"></i>Réservations précédentes
+                    </div>
+                    <div class="header-account">
+                        <i class="fas fa-solid fa-user"></i><a href="{% url 'compte:modifier_compte' %}">Mon compte</a>
+                        {% if user.is_authenticated %}
+                        - <a href="{% url 'ppm:deconnexion' %}">Déconnexion</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+        <aside>
+            <ul class="menu">
+                <li><a href="{% url 'ppm:dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{% url 'ppm:gestion_activites' %}"><i class="fas fa-tasks"></i> Activités</a></li>
+                <li><a href="{% url 'ppm:gestion_reservations' %}"><i class="fas fa-calendar-check"></i>
+                        Réservations</a></li>
+                <li><a href="{% url 'ppm:gestion_personnel' %}"><i class="fas fa-users"></i> Employés</a></li>
+                <li><a href="{% url 'ppm:gestion_tarifs' %}"><i class="fas fa-money-bill-alt"></i> Tarifs et
+                        Paiements</a></li>
+                <li><a href="{% url 'ppm:gestion_stats_rapports' %}"><i class="fas fa-chart-bar"></i> Statistiques et
+                        Rapports</a></li>
+                <li><a href="{% url 'ppm:gestion_equipements' %}"><i class="fas fa-toolbox"></i> Équipements</a></li>
+                <li><a href="{% url 'ppm:gestion_contacts' %}"><i class="fas fa-address-book"></i> Contacts</a></li>
+            </ul>
+        </aside>
+        <main>
+            {% block cp %}
+            <div class="main-content">
+                <section class="intro">
+                    <h2>Bienvenue sur PlayPark Manager</h2>
+                    <p>Gérez facilement vos activités, réservations, employés et maintenance de parc de jeux.</p>
+                </section>
+                <section class="fonctionnalites">
+                    <h2>Fonctionnalités clés</h2>
+                    <ul>
+                        <li>Gestion des activités</li>
+                        <li>Réservations en ligne</li>
+                        <li>Gestion des employés</li>
+                        <li>Maintenance et suivi des équipements</li>
+                        <li>Gestion des tarifs et des paiements</li>
+                        <li>Statistiques et rapports</li>
+                    </ul>
+                </section>
+            </div>
+            {% endblock %}
+            <div class="main-footer">
+                <p>&copy; 2023 PlayPark Manager. Tous droits réservés.</p>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
